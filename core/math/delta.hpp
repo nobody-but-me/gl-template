@@ -3,9 +3,9 @@
 #define DELTA_HPP
 
 
-namespace math
+namespace Math
 {
-    namespace delta
+    namespace Delta
     {
 	void calculate_delta();
 	float get_delta_time();

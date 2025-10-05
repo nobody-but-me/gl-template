@@ -8,7 +8,7 @@
 #include <backend/glfw_integration.hpp>
 #include <common/enums.hpp>
 
-namespace glfwIntegration
+namespace GlfwIntegration
 {
     
     unsigned int g_current_window_height = 0;

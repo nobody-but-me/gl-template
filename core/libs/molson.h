@@ -16,7 +16,9 @@ typedef struct {
     unsigned int height;
     unsigned int width;
     unsigned int id;
+    bool alpha;
     
+    const char *name;
     const char *path;
 } Texture;
 
@@ -28,7 +30,7 @@ typedef struct {
 
 const char *molson(file_to_char)(const char *file_path);
 
-Texture molson(load_texture)(const char *file_path, bool alpha);
+Texture molson(load_texture)(const char *name, const char *file_path, bool alpha);
 
 int molson(init_shader)(const char *vertex_path, const char *fragment_path, Shader *shader);
 void molson(destroy_shader)(Shader *shader);
@@ -44,7 +46,7 @@ int molson(set_int)(const char *name, int value, bool use_shader, Shader *shader
 int molson(set_bool)(const char *name, bool value, Shader *shader);
 
 // --------------------------------------------------
-// -               IMPLEMENTATION                   -
+// |               IMPLEMENTATION                   |
 // --------------------------------------------------
 
 #endif//MOLSON_H
@@ -145,7 +147,7 @@ static void generate_texture(unsigned int width, unsigned int height, unsigned c
     return;
 }
 
-Texture molson(load_texture)(const char *file_path, bool alpha) {
+Texture molson(load_texture)(const char *name, const char *file_path, bool alpha) {
     Texture new_texture;
     init_texture(&new_texture);
     // Setting alpha format if alpha parameters is true
@@ -165,6 +167,8 @@ Texture molson(load_texture)(const char *file_path, bool alpha) {
     stbi_image_free(data);
     
     new_texture.path = file_path;
+    new_texture.alpha = alpha;
+    new_texture.name = name;
 #if VERBOSE == true
     printf("[MOLSON]: Texture had been loaded successfully. \n");
 #endif

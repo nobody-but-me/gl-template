@@ -9,9 +9,9 @@
 
 constexpr double MAX_FRAMERATE = 60.0f;
 
-namespace math
+namespace Math
 {
-    namespace delta
+    namespace Delta
     {
 	
 	double previous_time = 0.0f;
@@ -30,7 +30,7 @@ namespace math
 	}
 	
 	void update() {
-	    float dt = math::delta::get_delta_time();
+	    float dt = Math::Delta::get_delta_time();
 	    frame_time -= dt;
 	    updates += dt;
 	    return;

@@ -4,11 +4,11 @@
 #include <backend/backend.hpp>
 
 int main(int argc, char *argv[]) {
-    if ((backEnd::init(WindowMode::WINDOWED_MODE)) == -1) return -1;
+    if ((BackEnd::init(WindowMode::WINDOWED_MODE)) == -1) return -1;
     
-    backEnd::ready();
-    while (backEnd::is_window_open()) backEnd::loop();
+    BackEnd::ready();
+    while (BackEnd::is_window_open()) BackEnd::loop();
     
-    backEnd::destroy_application();
+    BackEnd::destroy_application();
     return 0;
 }

@@ -13,7 +13,7 @@
 #define  DEFAULT_WINDOW_HEIGHT DEFAULT_WINDOW_WIDTH/16*9
 #define DEFAULT_WINDOW_TITLE   "Bug game"
 
-namespace glfwIntegration
+namespace GlfwIntegration
 {
     
     void set_window_mode(const WindowMode& window_mode);

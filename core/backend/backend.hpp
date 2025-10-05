@@ -5,7 +5,7 @@
 
 #include <common/enums.hpp>
 
-namespace backEnd
+namespace BackEnd
 {
     
     void force_window_close( );
