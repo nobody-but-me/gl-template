@@ -14,6 +14,7 @@
 #include <renderer/renderer.hpp>
 #include <common/object.hpp>
 #include <common/enums.hpp>
+#include <utils/log.hpp>
 
 #define MOLSON_IMPLEMENTATION
 #include <libs/molson.h>
@@ -40,7 +41,7 @@ namespace Gfx
 		else if (err == GL_OUT_OF_MEMORY) error_message            = "out of memory.";
 		else if (err == GL_INVALID_ENUM) error_message             = "Invalid enum.";
 		
-		std::cerr << "[FAILED] : render.cpp::check_gl_errors() : " << error_message << std::endl;
+		Logging::ERROR("render.cpp::check_gl-errors() : %s.", error_message.c_str());
 		return 1;
 	    }
 	    return 0;
@@ -95,7 +96,7 @@ namespace Gfx
 	    trans = glm::scale(trans, glm::vec3(object->scale, 1.0f));
 	    
 	    if (molson(set_matrix4)("transform", &trans, false, &g_main_object_shader) != 0) {
-		std::cerr << "[FAILED] : renderer.cpp::set_object_transform() : Failed to set object transform; " << std::endl;
+		Logging::ERROR("renderer.cpp::set_object_transform() : Failed to set object transform.");
 		return -1;
 	    }
 	    return 0;
@@ -107,7 +108,7 @@ namespace Gfx
 	    
 	    float colour[] = { object->colour.x / 255, object->colour.y / 255, object->colour.z / 255, object->colour.w / 255 };
 	    if ((molson(set_vector4_f)("colour", colour, false, &g_main_object_shader)) != 0) {
-		std::cerr << "[FAILED] : renderer.cpp::render_object() : Failed to set colour of object " << object->name << "." << std::endl;
+		Logging::ERROR("renderer.cpp::render_object() : Failed to set colour of object %s.", object->name.c_str());
 		return;
 	    }
 	    
@@ -147,8 +148,8 @@ namespace Gfx
 	    projection = glm::ortho(win_width * -1.0f, win_width, win_height * -1.0f, win_height, -1.0f, 100.0f);
 	    view  = glm::translate(view, glm::vec3(-3.0f, -2.5f, -50.0f)); // TODO: magic numbers.
 	    
-	    if ((molson(set_matrix4)("projection", &projection, true, &g_main_object_shader)) != 0) { std::cerr << "[FAILED] : renderer.cpp::init() : Failed to set main object shader projection uniform variable." << std::endl; }
-	    if ((molson(set_matrix4)("view", &view, true, &g_main_object_shader)) != 0) { std::cerr << "[FAILED] : renderer.cpp::init() : Failed to set main object shader view uniform variable." << std::endl; }
+	    if ((molson(set_matrix4)("projection", &projection, true, &g_main_object_shader)) != 0) { Logging::ERROR("renderer.cpp::init() : Failed to set main object shader project uniform variable."); }
+	    if ((molson(set_matrix4)("view", &view, true, &g_main_object_shader)) != 0) { Logging::ERROR("renderer.cpp::init() : Failed to set main object shader view uniform variable."); }
 	    
 	    // NOTE: bad: kinda hard-coded; It would be better if, after calling the rect initialize function, the code indentified if the global quad was already loaded or not.
 	    init_global_quad();

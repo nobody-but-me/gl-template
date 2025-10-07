@@ -1,6 +1,5 @@
 
 #include <iostream>
-
 #include <backend/backend.hpp>
 
 int main(int argc, char *argv[]) {

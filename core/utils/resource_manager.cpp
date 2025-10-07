@@ -8,6 +8,7 @@
 #include <renderer/renderer.hpp>
 #include <common/object.hpp>
 #include <libs/molson.h>
+#include <utils/log.hpp>
 
 namespace ResourceManager
 {
@@ -22,8 +23,13 @@ namespace ResourceManager
     }
     Object *get_object(std::string object_name) {
 	auto object = std::find_if(g_objects.begin(), g_objects.end(), [&](const Object *obj) { return obj->name == object_name; });
-	if (object != g_objects.end()) return *object;
-	else return NULL;
+	if (object != g_objects.end()) { 
+	    Logging::NOTE("resource_manager.cpp::get_object() : Object had been found successfully");
+	    return *object;
+	} else {
+	    Logging::ERROR("resource_manager.cpp::get_object() : Object not found.");
+	    return NULL;
+	}
     }
     
     // TODO: ensure that there are not already other objects with the same name in the vectors.

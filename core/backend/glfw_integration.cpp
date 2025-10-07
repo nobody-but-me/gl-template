@@ -7,6 +7,7 @@
 
 #include <backend/glfw_integration.hpp>
 #include <common/enums.hpp>
+#include <utils/log.hpp>
 
 namespace GlfwIntegration
 {
@@ -59,7 +60,7 @@ namespace GlfwIntegration
     void force_window_close() { g_force_window_close = true; return; }
     
     static void glfw_error_callback(int error, const char *description) {
-	std::cerr << "[FAILED] : GLFW error : \n[ " << std::to_string(error).c_str() << " ]\n DESCRIPTION: " << description << "." << std::endl;
+	Logging::ERROR("GLFW Error : \n [ %s ]\n DESCRITION: %s.", std::to_string(error).c_str(), description);
 	return;
     }
     int init(const WindowMode& window_mode) {
@@ -106,14 +107,14 @@ namespace GlfwIntegration
 	}
 	
 	if (g_window == NULL) {
-	    std::cerr << "[FAILED] : glfw_integration.cpp::init() : Failed to initialize window.\n" << std::endl;
+	    Logging::ERROR("glfw_integration.cpp::init() : Failed to initialize window.");
 	    glfwTerminate();
 	    return -1;
 	}
 	glfwMakeContextCurrent(g_window);
 	int glad_version = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	if (!glad_version) {
-	    std::cerr << "[FAILED] : glfw_integration.cpp::init() : Failed to intialize OpenGL context. The application is not glad at all.\n" << std::endl;
+	    Logging::ERROR("glfw_integration.cpp::init() : failed to initialize OpenGL context. The application is not glad at all.");
 	    glfwTerminate();
 	    return -1;
 	}
@@ -122,7 +123,7 @@ namespace GlfwIntegration
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	
-	std::cout << "[INFO] : glfw_integration.cpp::init() : Window had been configured succesfully.\n" << std::endl;
+	Logging::NOTE("glfw_integration.cpp::init() : Window had been configured successfully.");
 	return 0;
     }
     void destroy() {
