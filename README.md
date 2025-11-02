@@ -1,11 +1,5 @@
 
-# Bug game
-
-Spiritual version of https://github.com/nobody-but-me/golf-game .
-
-# Deadline:
-
-Still not defined.
+# Game Project
 
 # Dependencies:
 
@@ -13,6 +7,7 @@ Still not defined.
  - clang and clang++;
  - ninja;
  - glfw3;
+ - ENet library;
  - ;
 
 # Building:

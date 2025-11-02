@@ -2,12 +2,12 @@
 #!/usr/bin/env bash
 
 # if [ "$(type -t ./build/bin/mol)" = "file" ]; then
-if [ -f ./build/bin/app ]; then
+if [ -f ./build/bin/prototype ]; then
     echo "[INFO]: RUNNING...\n"
     
     cd ./build/bin/
     
-    ./app
+    ./prototype $1
     
     cd ..
 else

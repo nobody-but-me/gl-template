@@ -11,7 +11,7 @@
 
 #define  DEFAULT_WINDOW_WIDTH  800
 #define  DEFAULT_WINDOW_HEIGHT DEFAULT_WINDOW_WIDTH/4*3
-#define DEFAULT_WINDOW_TITLE   "Quitanda game"
+#define DEFAULT_WINDOW_TITLE   "Prototype"
 
 namespace GlfwIntegration
 {
