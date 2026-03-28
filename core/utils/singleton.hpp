@@ -5,15 +5,16 @@
 
 
 template <typename T>
-class Singleton
+class singleton
 {
 protected:
-    Singleton() {}
+    singleton() {}
 public:
-    Singleton(const Singleton *singleton) = delete;
-    Singleton *operator = (const Singleton *) = delete;
+    singleton(const singleton *_singleton) = delete;
+    singleton *operator = (const singleton *) = delete;
     
-    static T *get_instance() {
+    static T *get_instance()
+    {
 	static T instance;
 	return &instance;
     }

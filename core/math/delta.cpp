@@ -9,11 +9,10 @@
 
 constexpr double MAX_FRAMERATE = 60.0f;
 
-namespace Math
+namespace math
 {
-    namespace Delta
+    namespace delta
     {
-	
 	double previous_time = 0.0f;
 	double current_time = 0.0f;
 	double delta = 1 / MAX_FRAMERATE;
@@ -21,16 +20,19 @@ namespace Math
 	double time = 0.0f;
 	double frame_time;
 	
-	bool is_frametiming() {
+	bool is_frametiming()
+	{
 	    return (frame_time > 0.0f);
 	}
 	
-	float get_delta_time() {
+	float get_delta_time()
+	{
 	    return std::min(frame_time, delta);
 	}
 	
-	void update() {
-	    float dt = Math::Delta::get_delta_time();
+	void update()
+	{
+	    float dt = math::delta::get_delta_time(); // is it necessary?
 	    frame_time -= dt;
 	    updates += dt;
 	    return;
@@ -42,6 +44,5 @@ namespace Math
 	    frame_time = current_time - previous_time;
 	    return;
 	}
-	
     }
 }

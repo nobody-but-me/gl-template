@@ -5,7 +5,7 @@
 #include <common/enums.hpp>
 #include <math/delta.hpp>
 
-#include <backend/glfw_integration.hpp>
+#include <backend/gl.hpp>
 #include <utils/resource_manager.hpp>
 #include <renderer/renderer.hpp>
 #include <backend/backend.hpp>
@@ -17,62 +17,76 @@
 
 #define SHADER_PATH "../../core/res/shaders/"
 
-namespace BackEnd
+namespace backend
 {
     
-    Shader main_shader;
+    shader main_shader;
     
-    void force_window_close( ) { GlfwIntegration::force_window_close(); }
-    void destroy_application() {
-		Logging::INFO("backend.cpp::destroy_application() : Destroying application...");
-				
-		Editor::destroy();
-		GlfwIntegration::destroy();
-		return;
+    void force_window_close(void)
+    {
+	gl::force_window_close();
+    }
+    void destroy_application(void)
+    {
+	utils::log::info("backend.cpp::destroy_application() : Destroying application...");
+
+	editor::destroy();
+	gl::destroy();
+	return;
     }
     
-    bool is_window_open() { return GlfwIntegration::is_window_open(); }
+    bool is_window_open(void)
+    { 
+	return gl::is_window_open();
+    }
     
-    int init(const WindowMode& window_mode) {
-		if (GlfwIntegration::init(window_mode) == -1) return -1;
-		
-		ResourceManager::load_shader(&main_shader, "main_shader", SHADER_PATH"object.vert", SHADER_PATH"object.frag");
+    int init(const window_mode& _window_mode)
+    {
+	if (gl::init(_window_mode) == -1) return -1;
 	
-		Gfx::Renderer::init();
-		InputManager::init(GlfwIntegration::get_current_window());
-		Application::ready();
-		
-		Editor::init(GlfwIntegration::get_current_window());
-		Logging::INFO("backend.cpp::init() : backend initialized successfully.");
-		Logging::NOTE("Hello, World!\n");
-		return 0;
+	utils::resource_manager::load_shader(&main_shader, "main_shader", SHADER_PATH"object.vert", SHADER_PATH"object.frag");
+
+	renderer::init();
+	utils::input_manager::init(gl::get_current_window());
+	application::ready();
+	
+	editor::init(gl::get_current_window());
+	utils::log::info("backend.cpp::init() : backend initialized successfully.");
+	utils::log::note("Hello, World!\n");
+	return 0;
     }
     
-    void begin_frame() {
-		GlfwIntegration::begin_frame();
+    void begin_frame(void)
+    {
+	gl::begin_frame();
     }
-    void end_frame() {
-		GlfwIntegration::end_frame();
+    void end_frame(void)
+    {
+	gl::end_frame();
     }
-		
-    void loop() {
-		begin_frame();
-		if (InputManager::is_key_pressed(KEY_ESC)) force_window_close();
-		
-		Math::Delta::calculate_delta();
-		while (Math::Delta::is_frametiming()) {
-	    	Application::process(Math::Delta::get_delta_time());
-	    	Math::Delta::update();
-		}
-		render();
+
+    void loop(void)
+    {
+	begin_frame();
+	if (utils::input_manager::is_key_pressed(KEY_ESC))
+	    force_window_close();
 	
-		end_frame();
+	math::delta::calculate_delta();
+	while (math::delta::is_frametiming())
+	{
+	    application::process(math::delta::get_delta_time());
+	    math::delta::update();
+	}
+	render();
+
+	end_frame();
     }
-    void render() {
-		ResourceManager::render_objects();
-		ResourceManager::play_animations();
-		Editor::render();
-		return;
+    void render(void)
+    {
+	utils::resource_manager::render_objects();
+	utils::resource_manager::play_animations();
+	editor::render();
+	return;
     }
     
 }

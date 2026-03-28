@@ -4,14 +4,10 @@
 #define APPLICATION_HPP
 
 
-namespace Application
+namespace application
 {
-    
-	void add_player();
-	void add_puppet();
-	
-    void process(double delta);
-    void ready();
+    void process(double _delta);
+    void ready(void);
     
 }
 

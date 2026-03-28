@@ -2,20 +2,28 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-namespace InputManager
+namespace utils
 {
-    
-    GLFWwindow *window;
-    
-    bool is_key_pressed(int key) {
-	int state = glfwGetKey(window, key);
-	if (state == GLFW_PRESS) return true;
-	return false;
+    namespace input_manager
+    {
+	
+	GLFWwindow *window;
+	
+	bool is_key_pressed(int _key)
+	{
+	    int state = glfwGetKey(window, _key);
+	    if (state == GLFW_PRESS) 
+	    {
+		return true;
+	    }
+	    return false;
+	}
+	
+	void init(GLFWwindow *_win)
+	{
+	    window = _win;
+	    return;
+	};
+	
     }
-    
-    void init(GLFWwindow *win) {
-	window = win;
-	return;
-    };
-    
 }

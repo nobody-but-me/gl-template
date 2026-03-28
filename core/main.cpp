@@ -2,11 +2,18 @@
 #include <iostream>
 #include <backend/backend.hpp>
 
-int main(int argc, char *argv[]) {
-    if ((BackEnd::init(WindowMode::WINDOWED_MODE)) == -1) return -1;
+int main(int argc, char *argv[])
+{
+    if ((backend::init(window_mode::windowed_mode)) == -1)
+    {
+	return -1;
+    }
     
-    while (BackEnd::is_window_open()) BackEnd::loop();
+    while (backend::is_window_open())
+    {
+	backend::loop();
+    }
     
-    BackEnd::destroy_application();
+    backend::destroy_application();
     return 0;
 }

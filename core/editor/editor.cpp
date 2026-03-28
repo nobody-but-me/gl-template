@@ -15,19 +15,21 @@
 
 #define GUI_SCALE ImGui_ImplGlfw_GetContentScaleForMonitor(glfwGetPrimaryMonitor())
 
-namespace Editor
+namespace editor
 {
     
     GLFWwindow *g_main_window;
     
-    void destroy() {
+    void destroy(void)
+    {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 	return;
     }
     
-    void render() {
+    void render(void)
+    {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
@@ -45,8 +47,9 @@ namespace Editor
 	return;
     }
     
-    void init(GLFWwindow *window) {
-	g_main_window = window;
+    void init(GLFWwindow *_window)
+    {
+	g_main_window = _window;
 	
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();

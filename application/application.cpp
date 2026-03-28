@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 
-#include <backend/glfw_integration.hpp>
+#include <backend/gl.hpp>
 #include <utils/resource_manager.hpp>
 #include <common/object.hpp>
 #include <utils/log.hpp>
@@ -12,29 +12,36 @@
 #include <common/object.hpp>
 #include <utils/input.hpp>
 
-namespace Application {
+namespace application
+{
     
-    Object sprite, sprite2, offset;
-    Texture texture;
+    object sprite, sprite2, offset;
+    texture texture;
     
     float speed = 4.0f;
-	    
-    void process(double delta) {
-		sprite2.position.x += speed * delta;
+    
+    void process(double _delta)
+    {
+		sprite2.position.x += speed * _delta;
 		offset.position = sprite2.position;
-		if (sprite2.position.x >= 12.0f) sprite2.position.x = -10.0f;
-		if (Physics::is_rect_colliding(&sprite2, &sprite)) sprite2.colour = glm::vec4(255.0f, 0.0f  , 0.0f  , 255.0f);
-		else                                               sprite2.colour = glm::vec4(255.0f, 255.0f, 255.0f, 255.0f);
+		if (sprite2.position.x >= 12.0f)
+		    sprite2.position.x = -10.0f;
+		
+		if (math::physics::is_rect_colliding(&sprite2, &sprite))
+		    sprite2.colour = glm::vec4(255.0f, 0.0f  , 0.0f  , 255.0f);
+		else
+		    sprite2.colour = glm::vec4(255.0f, 255.0f, 255.0f, 255.0f);
 		return;
     }
 	
-    void ready() {
-		ResourceManager::load_texture(&texture, "mir", "../../application/res/sprites/sprite_sheet.png", true);
+    void ready(void)
+    {
+		utils::resource_manager::load_texture(&texture, "mir", "../../application/res/sprites/sprite_sheet.png", true); // gosh
 		
-		ResourceManager::init_rectangle(&sprite2, "Sprite2", &texture);
-		ResourceManager::init_rectangle(&sprite, "Sprite", &texture);
+		utils::resource_manager::init_rectangle(&sprite2, "Sprite2", &texture);
+		utils::resource_manager::init_rectangle(&sprite, "Sprite", &texture);
 		
-		ResourceManager::init_rectangle(&offset, "Offset", nullptr);
+		utils::resource_manager::init_rectangle(&offset, "Offset", nullptr);
 		
 		sprite.colour = glm::vec4(255.0f, 255.0f, 255.0f, 255.0f);
 		sprite.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -59,18 +66,17 @@ namespace Application {
 		sprite2.rows = 8; sprite2.cols = 8;
 		sprite.rows  = 8; sprite.cols  = 8;
 	
-		ResourceManager::init_animation(&sprite2.animation, "animation2", AnimationType::LOOP, 5, 0, true );
-		ResourceManager::init_animation(&sprite.animation , "animation" , AnimationType::LOOP, 3, 0, false);
+		utils::resource_manager::init_animation(&sprite2.anim, "animation2", animation_type::loop, 5, 0, true );
+		utils::resource_manager::init_animation(&sprite.anim , "animation" , animation_type::loop, 3, 0, false);
 	
 		// NOTE: Are the bellow numbers magic-numbers? Sort of. These are the frame numbers relative to the sprite 
 		//   sheet loaded by this object. This will be useful when the game engine have a visual animation timeline where
 		// you will be able to set up the frames visually, just like in game engines like unity and godot, for example.
 		
-		sprite2.animation.set_frames({9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20});
-		sprite.animation.set_frames({ 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 1 });
+		sprite2.anim.set_frames({9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20});
+		sprite.anim.set_frames({ 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 1 });
 		
-		sprite.animation.play();
-	
+		sprite.anim.play();
 		return;
     }
     

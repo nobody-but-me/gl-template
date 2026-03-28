@@ -5,32 +5,35 @@
 
 #include <string>
 
-namespace Logging
+namespace utils
 {
-    
-    // Don't ask me where I got these values.
-    namespace Colours {
-	enum Colour {
-	    YELLOW  = 0x04,
-	    MAGENTA = 0x06,
-	    GREEN   = 0x03,
-	    WHITE   = 0x08,
-	    BLACK   = 0x01,
-	    NONE    = 0x00,
-	    BLUE    = 0x05,
-	    CYAN    = 0x07,
-	    RED     = 0x02
-	};
+    namespace log
+    {
+	
+	// Don't ask me where I got these values.
+	namespace colours {
+	    enum colour {
+		yellow  = 0x04,
+		magenta = 0x06,
+		green   = 0x03,
+		white   = 0x08,
+		black   = 0x01,
+		none    = 0x00,
+		blue    = 0x05,
+		cyan    = 0x07,
+		red     = 0x02
+	    };
+	}
+	
+	void warning(const char *text, ...);
+	void error(const char *text, ...);
+	void fatal(const char *text, ...);
+	void note(const char *text, ...);
+	void todo(const char *text, ...);
+	void info(const char *text, ...);
+	void log(const char *text, ...);
+	
     }
-    
-    void WARNING(const char *text, ...);
-    void ERROR(const char *text, ...);
-    void FATAL(const char *text, ...);
-    void NOTE(const char *text, ...);
-    void TODO(const char *text, ...);
-    void INFO(const char *text, ...);
-    void LOG(const char *text, ...);
-    
 }
 
 #endif//LOG_HPP

@@ -5,7 +5,7 @@
 
 #include <GLFW/glfw3.h>
 
-enum KEYCODES {
+enum keycodes {
     
     KEY_A = GLFW_KEY_A,
     KEY_B = GLFW_KEY_B,
@@ -51,23 +51,23 @@ enum KEYCODES {
     
 };
 
-enum class AnimationType
+enum class animation_type
 {
-    PING_PONG,
-    LOOP,
-    ONCE,
+    ping_pong,
+    loop,
+    once,
 };
 
-enum class ObjectType
+enum class object_type
 {
     TRIANGLE,
     QUAD
 };
 
-enum class WindowMode
+enum class window_mode
 {
-    FULLSCREEN_MODE,
-    WINDOWED_MODE
+    fullscreen_mode,
+    windowed_mode
 };
 
 #endif//ENUMS_HPP

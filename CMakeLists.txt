@@ -48,7 +48,7 @@ target_sources(prototype PRIVATE
 	${SRC_FILES} 
 	${CMAKE_SOURCE_DIR}/core/libs/glad.c
 )
-target_compile_options(prototype PRIVATE -Wall -Werror -pedantic -Wno-unknown-pragmas -Wno-unused-function)
+target_compile_options(prototype PRIVATE -Wall -Werror -Wno-unknown-pragmas -Wno-unused-function)
 target_link_options(prototype PUBLIC -fPIE -fPIC)
 
 target_link_libraries(prototype PRIVATE ${OPENGL_gl_LIBRARY} ${GLFW_LIB})

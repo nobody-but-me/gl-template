@@ -5,21 +5,21 @@
 
 #include <common/enums.hpp>
 
-namespace BackEnd
+namespace backend
 {
     
-    void force_window_close( );
-    void destroy_application();
+    void force_window_close(void);
+    void destroy_application(void);
     
-    bool is_window_open();
+    bool is_window_open(void);
     
-    int init(const WindowMode& window_mode);
+    int init(const window_mode& _window_mode);
     
-    void begin_frame();
-    void end_frame();
+    void begin_frame(void);
+    void end_frame(void);
     
-    void render();
-    void loop();
+    void render(void);
+    void loop(void);
     
 }
 

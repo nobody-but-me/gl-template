@@ -5,11 +5,11 @@
 #include <glad.h>
 #include <GLFW/glfw3.h>
 
-#include <backend/glfw_integration.hpp>
+#include <backend/gl.hpp>
 #include <common/enums.hpp>
 #include <utils/log.hpp>
 
-namespace GlfwIntegration
+namespace gl
 {
     
     unsigned int g_current_window_height = 0;
@@ -22,20 +22,23 @@ namespace GlfwIntegration
     bool g_force_window_close = false;
     bool g_window_focused = true;
     
-    WindowMode g_window_mode;
+    window_mode g_window_mode;
     
     const GLFWvidmode *g_mode;
     
     GLFWwindow  *g_window = NULL;
     GLFWmonitor *g_monitor;
     
-    void set_window_mode(const WindowMode& window_mode) {
-	g_window_mode = window_mode;
-	if (window_mode == WindowMode::WINDOWED_MODE) {
+    void set_window_mode(const window_mode& _window_mode)
+    {
+	g_window_mode = _window_mode;
+	if (_window_mode == window_mode::windowed_mode)
+	{
 	    g_current_window_height = g_windowed_height;
 	    g_current_window_width = g_windowed_width;
 	}
-	else if (window_mode == WindowMode::FULLSCREEN_MODE) {
+	else if (_window_mode == window_mode::fullscreen_mode)
+	{
 	    g_current_window_height = g_fullscreen_height;
 	    g_current_window_width = g_fullscreen_width;
 	}
@@ -44,26 +47,47 @@ namespace GlfwIntegration
 	return;
     }
     
-    unsigned int get_current_window_height() { return g_current_window_height; }
-    unsigned int get_current_window_width() { return g_current_window_width; }
-    GLFWwindow* get_current_window() { return g_window; }
+    unsigned int get_current_window_height(void)
+    {
+	return g_current_window_height;
+    }
+    unsigned int get_current_window_width(void)
+    {
+	return g_current_window_width;
+    }
+    GLFWwindow* get_current_window(void)
+    {
+	return g_window;
+    }
     
-    bool is_window_minimized();
-    bool is_window_focused();
-    bool is_window_open() { return !(glfwWindowShouldClose(g_window) || g_force_window_close); }
+    bool is_window_minimized(void);
+    bool is_window_focused(void);
+    bool is_window_open(void)
+    {
+	return !(glfwWindowShouldClose(g_window) || g_force_window_close);
+    }
     
-    void toggle_window_fullscreen() {
-	if (g_window_mode == WindowMode::WINDOWED_MODE) set_window_mode(WindowMode::FULLSCREEN_MODE);
-	else                                            set_window_mode(WindowMode::WINDOWED_MODE);
+    void toggle_window_fullscreen(void)
+    {
+	if (g_window_mode == window_mode::windowed_mode)
+	    set_window_mode(window_mode::fullscreen_mode);
+	else
+	    set_window_mode(window_mode::windowed_mode);
 	return;
     }
-    void force_window_close() { g_force_window_close = true; return; }
-    
-    static void glfw_error_callback(int error, const char *description) {
-	Logging::ERROR("GLFW Error : \n [ %s ]\n DESCRITION: %s.", std::to_string(error).c_str(), description);
+    void force_window_close(void)
+    {
+	g_force_window_close = true;
 	return;
     }
-    int init(const WindowMode& window_mode) {
+    
+    static void glfw_error_callback(int _error, const char *_description)
+    {
+	utils::log::error("GLFW Error : \n [ %s ]\n DESCRITION: %s.", std::to_string(_error).c_str(), _description);
+	return;
+    }
+    int init(const window_mode& _window_mode)
+    {
 	glfwInit();
 	glfwSetErrorCallback(glfw_error_callback);
 	
@@ -90,30 +114,34 @@ namespace GlfwIntegration
 	g_windowed_height = DEFAULT_WINDOW_HEIGHT;
 	g_windowed_width = DEFAULT_WINDOW_WIDTH;
 	
-	g_window_mode = window_mode; 
-	if (g_window_mode == WindowMode::WINDOWED_MODE) {
+	g_window_mode = _window_mode; 
+	if (g_window_mode == window_mode::windowed_mode)
+	{
 	    g_current_window_height = g_windowed_height;
 	    g_current_window_width = g_windowed_width;
 	    
 	    g_window = glfwCreateWindow(g_windowed_width, g_windowed_height, DEFAULT_WINDOW_TITLE, NULL, NULL);
 	    glfwSetWindowPos(g_window, 0, 0);
 	}
-	else if (g_window_mode == WindowMode::FULLSCREEN_MODE) {
+	else if (g_window_mode == window_mode::fullscreen_mode)
+	{
 	    g_current_window_height = g_fullscreen_height;
 	    g_current_window_width = g_fullscreen_width;
 	    
 	    g_window = glfwCreateWindow(g_windowed_width, g_windowed_height, DEFAULT_WINDOW_TITLE, g_monitor, NULL);
 	}
 	
-	if (g_window == NULL) {
-	    Logging::ERROR("glfw_integration.cpp::init() : Failed to initialize window.");
+	if (g_window == NULL)
+	{
+	    utils::log::error("glfw_integration.cpp::init() : Failed to initialize window.");
 	    glfwTerminate();
 	    return -1;
 	}
 	glfwMakeContextCurrent(g_window);
 	int glad_version = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	if (!glad_version) {
-	    Logging::ERROR("glfw_integration.cpp::init() : failed to initialize OpenGL context. The application is not glad at all.");
+	if (!glad_version)
+	{
+	    utils::log::error("glfw_integration.cpp::init() : failed to initialize OpenGL context. The application is not glad at all.");
 	    glfwTerminate();
 	    return -1;
 	}
@@ -123,16 +151,19 @@ namespace GlfwIntegration
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_DEPTH_TEST);
 	
-	Logging::INFO("glfw_integration.cpp::init() : Window had been configured successfully.");
+	utils::log::info("glfw_integration.cpp::init() : Window had been configured successfully.");
 	return 0;
     }
-    void destroy() {
-	if (g_window_mode == WindowMode::FULLSCREEN_MODE) toggle_window_fullscreen();
+    void destroy(void)
+    {
+	if (g_window_mode == window_mode::fullscreen_mode)
+	    toggle_window_fullscreen();
 	glfwTerminate();
 	return;
     }
     
-    void begin_frame() {
+    void begin_frame(void)
+    {
 	glfwPollEvents();
 	glClearColor(0.07f, 0.07f, 0.07f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -142,7 +173,8 @@ namespace GlfwIntegration
 	g_window_focused = (focused != 0);
 	return;
     }
-    void end_frame() {
+    void end_frame(void)
+    {
 	glfwSwapBuffers(g_window);
 	return;
     }

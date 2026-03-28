@@ -5,12 +5,12 @@
 
 #include <GLFW/glfw3.h>
 
-namespace Editor
+namespace editor
 {
     
-    void init(GLFWwindow *window);
-    void destroy();
-    void render();
+    void init(GLFWwindow *_window);
+    void destroy(void);
+    void render(void);
     
 }
 

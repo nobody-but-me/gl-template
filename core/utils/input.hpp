@@ -3,12 +3,15 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
-namespace InputManager
+namespace utils
 {
-    
-    bool is_key_pressed(int key);
-    void init(GLFWwindow *win);
-    
+    namespace input_manager
+    {
+	
+	bool is_key_pressed(int _key);
+	void init(GLFWwindow *_win);
+	
+    }
 }
 
 #endif//INPUT_HPP

@@ -5,15 +5,17 @@
 
 #include <common/object.hpp>
 
-namespace Physics
+namespace math
 {
-    
-    bool is_rect_horizontally_aligned(Object *object1, Object *object2);
-    bool is_rect_vertically_aligned(Object *object1, Object *object2);
-    
-    bool is_rect_colliding(Object *object1, Object *object2);
-    
+    namespace physics
+    {
+	
+	bool is_rect_horizontally_aligned(object *_object1, object *_object2);
+	bool is_rect_vertically_aligned(object *_object1, object *_object2);
+	
+	bool is_rect_colliding(object *_object1, object *_object2);
+	
+    }
 }
-
 
 #endif//COLLISION_HPP
