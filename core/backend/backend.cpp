@@ -3,7 +3,7 @@
 #include <string>
 
 #include <common/enums.hpp>
-#include <math/delta.hpp>
+#include <math/math.hpp>
 
 #include <backend/gl.hpp>
 #include <utils/resource_manager.hpp>

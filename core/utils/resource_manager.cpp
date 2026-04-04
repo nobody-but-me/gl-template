@@ -25,41 +25,137 @@ namespace utils
 	std::vector<shader*> g_shaders;
 	std::vector<object*> g_objects;
 	
-	animation *get_animation(std::string _animation_name)
+	animation *get_animation(std::string _animation_name,bool _verbose)
 	{
 	    auto _animation = std::find_if(g_animations.begin(), g_animations.end(), [&](const animation *anim) { return anim->name == _animation_name; });
-	    if (_animation != g_animations.end()) return *_animation;
-	    else return NULL;
+	    if (_animation != g_animations.end())
+	    {
+		if(_verbose)
+		{
+		    utils::log::info("resource_manager.cpp::get_animation() : %s animation had been found successfully",_animation_name);
+		}
+		return *_animation;
+	    }
+	    else
+	    {
+		if(_verbose)
+		{
+		    utils::log::error("resource_manager.cpp::get_animation() : %s animation not found.",_animation_name);
+		}
+		return NULL;
+	    }
 	}
-	texture *get_texture(std::string _texture_name)
+	texture *get_texture(std::string _texture_name,bool _verbose)
 	{
 	    auto _texture = std::find_if(g_textures.begin(), g_textures.end(), [&](const texture *tex) { return tex->name == _texture_name; });
-	    if (_texture != g_textures.end()) return *_texture;
-	    else return NULL;
+	    if (_texture != g_textures.end())
+	    {
+		if(_verbose)
+		{
+		    utils::log::info("resource_manager.cpp::get_texture() : %s texture had been found successfully",_texture_name);
+		}
+		return *_texture;
+	    }
+	    else
+	    {
+		if(_verbose)
+		{
+		    utils::log::error("resource_manager.cpp::get_texture() : %s texture not found.",_texture_name);
+		}
+		return NULL;
+	    }
 	}
-	shader *get_shader(std::string _shader_program_name)
+	shader *get_shader(std::string _shader_program_name,bool _verbose)
 	{
 	    auto _shader = std::find_if(g_shaders.begin(), g_shaders.end(), [&](const shader *shdr) { return shdr->name == _shader_program_name; });
-	    if (_shader != g_shaders.end()) return *_shader;
-	    else return NULL;
+	    if (_shader != g_shaders.end())
+	    {
+		if(_verbose)
+		{
+		    utils::log::info("resource_manager.cpp::get_shader() : %s shader had been found successfully",_shader_program_name);
+		}
+		return *_shader;
+	    }
+	    else
+	    {
+		if(_verbose)
+		{
+		    utils::log::error("resource_manager.cpp::get_shader() : %s shader not found.",_shader_program_name);
+		}
+		return NULL;
+	    }
 	}
-	object *get_object(std::string _object_name)
+	object *get_object(std::string _object_name,bool _verbose)
 	{
 	    auto _object = std::find_if(g_objects.begin(), g_objects.end(), [&](const object *obj) { return obj->name == _object_name; });
 	    if (_object != g_objects.end())
 	    {
-		utils::log::info("resource_manager.cpp::get_object() : Object had been found successfully");
+		if(_verbose)
+		{
+		    utils::log::info("resource_manager.cpp::get_object() : %s object had been found successfully",_object_name);
+		}
 		return *_object;
 	    }
 	    else
 	    {
-		utils::log::error("resource_manager.cpp::get_object() : Object not found.");
+		if(_verbose)
+		{
+		    utils::log::error("resource_manager.cpp::get_object() : %s object not found.",_object_name);
+		}
 		return NULL;
 	    }
 	}
 	
+	// TODO: write the other functions here;
+	void remove_animation(animation*_animation,bool _verbose)
+	{
+	    if (get_animation(_animation->name)==NULL)
+	    {
+		if (_verbose)
+		{
+		    utils::log::error("resource_manager.cpp::remove_animation() : Failed to remove %s animation: animmation not found.",_animation->name.c_str());
+		}
+		return;
+	    }
+	    g_animations.erase(std::remove(g_animations.begin(),g_animations.end(),_animation),g_animations.end());
+	    
+	    if (get_animation(_animation->name)==NULL)
+	    {
+		if (_verbose)
+		{
+		    utils::log::info("resource_manager.cpp::remove_animation() : %s animation removed successfully.",_animation->name.c_str());
+		}
+		return;
+	    }
+	    return;
+	}
+	void remove_texture(texture*_texture,bool _verbose);
+	void remove_object(object*_object,bool _verbose)
+	{
+	    if (get_object(_object->name)==NULL)
+	    {
+		if (_verbose)
+		{
+		    utils::log::error("resource_manager.cpp::remove_object() : Failed to remove %s object: object not found.",_object->name.c_str());
+		}
+		return;
+	    }
+	    g_objects.erase(std::remove(g_objects.begin(),g_objects.end(),_object),g_objects.end());
+	    
+	    if (get_object(_object->name)==NULL)
+	    {
+		if (_verbose)
+		{
+		    utils::log::info("resource_manager.cpp::remove_object() : %s object removed successfully.",_object->name.c_str());
+		}
+		return;
+	    }
+	    return;
+	}
+	void remove_shader(shader*_shader,bool _verbose);
+	
 	// TODO: ensure that there are not already other objects with the same name in the vectors.
-	void init_animation(animation *_animation, std::string _animation_name, animation_type _animation_type, unsigned int _delay, unsigned int _init_frame, bool _autoplay)
+	void init_animation(animation *_animation, std::string _animation_name, animation_type _animation_type, unsigned int _delay, unsigned int _init_frame, bool _autoplay,bool _verbose)
 	{
 	    _animation->name = _animation_name;
 	    
@@ -75,7 +171,7 @@ namespace utils
 	    g_animations.emplace_back(_animation);
 	    return;
 	}
-	void load_texture(texture *_texture, std::string _texture_name, std::string _texture_path, bool _alpha = true)
+	void load_texture(texture *_texture, std::string _texture_name, std::string _texture_path, bool _alpha = true,bool _verbose)
 	{
 	    if (_texture_path == "")
 	    {
@@ -85,7 +181,7 @@ namespace utils
 	    g_textures.emplace_back(_texture);
 	    return;
 	}
-	void load_shader(shader *_shader, const char *_shader_name, const char *_vertex_shader_path, const char *_fragment_shader_path)
+	void load_shader(shader *_shader, const char *_shader_name, const char *_vertex_shader_path, const char *_fragment_shader_path,bool _verbose)
 	{
 	    if ((strcmp("", _fragment_shader_path)) == 0)
 	    {
@@ -100,7 +196,7 @@ namespace utils
 	    return;
 	}
 	
-	void init_rectangle(object *_rectangle, std::string _object_name, texture *_texture)
+	void init_rectangle(object *_rectangle, std::string _object_name, texture *_texture,bool _verbose)
 	{
 	    renderer::init_rect(_rectangle, _texture, _object_name);
 	    g_objects.emplace_back(_rectangle);

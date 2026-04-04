@@ -24,8 +24,8 @@ class object: public singleton<object>
 	
     public:
 	bool animated = false;
-	animation anim;
 	int rows, cols = 1;
+	animation anim;
 	
 	int z_index;
 	
