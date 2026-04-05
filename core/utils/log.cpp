@@ -12,27 +12,7 @@ namespace utils
     namespace log
     {
 	
-	static inline std::string set_colour(colours::colour _foreground = colours::colour::none, colours::colour _background = colours::colour::none)
-	{
-	    std::stringstream s; s << "\033[";
-	    if (!_foreground && ! _background)
-	    {
-		s << "0";
-	    }
-	    if (_foreground)
-	    {
-	        s << 29 + _foreground;
-	        if (_background) s << ";";
-	    }
-	    if (_background)
-            {
-		s << 39 + _background;
-		s << "m";
-            }
-	    return s.str();
-	}
-	
-	static void message(colours::colour _foreground_colour = colours::colour::none, colours::colour _background_colour = colours::colour::none, const char *_string = "", va_list args = NULL)
+	static void message(const char *_string = "", va_list args = NULL)
 	{
 	    char token[1000]; int index = 0;
 	    for (int i = 0; _string[i] != '\0'; i++)
@@ -44,7 +24,7 @@ namespace utils
 		    index = 0;
 		    if (token[0] != '%')
 		    {
-			fprintf(stdout, "%s%s", set_colour(_foreground_colour, _background_colour).c_str(), token);
+			fprintf(stdout, "%s", token);
 		    }
 		    else
 		    {
@@ -95,7 +75,7 @@ namespace utils
 		    }
 	        }
 	    }
-	    fprintf(stdout, "\n%s", set_colour().c_str());
+	    // fprintf(stdout, "\n%s", set_colour().c_str());
 	    return;
 	}
 	
@@ -108,7 +88,7 @@ namespace utils
 	    char *new_string = (char*)malloc(length);
 	    snprintf(new_string, length, "%s%s", warning, _text);
 	    
-	    message(colours::colour::yellow, colours::colour::none, new_string, args);
+	    message(new_string, args);
 	    free(new_string);
 	    va_end(args);
 	    return;
@@ -122,7 +102,7 @@ namespace utils
 	    char *new_string = (char*)malloc(length);
 	    snprintf(new_string, length, "%s%s", error, _text);
 	    
-	    message(colours::colour::red, colours::colour::none, new_string, args);
+	    message(new_string, args);
 	    free(new_string);
 	    va_end(args);
 	    return;
@@ -136,7 +116,7 @@ namespace utils
 	    char *new_string = (char*)malloc(length);
 	    snprintf(new_string, length, "%s%s", fatal, _text);
 	    
-	    message(colours::colour::black, colours::colour::red, new_string, args);
+	    message(new_string, args);
 	    free(new_string);
 	    va_end(args);
 	    return;
@@ -150,7 +130,7 @@ namespace utils
 	    char *new_string = (char*)malloc(length);
 	    snprintf(new_string, length, "%s%s", note, _text);
 	    
-	    message(colours::colour::white, colours::colour::none, new_string, args);
+	    message(new_string, args);
 	    free(new_string);
 	    va_end(args);
 	    return;
@@ -164,7 +144,7 @@ namespace utils
 	    char *new_string = (char*)malloc(length);
 	    snprintf(new_string, length, "%s%s", todo, _text);
 	    
-	    message(colours::colour::magenta, colours::colour::none, new_string, args);
+	    message(new_string, args);
 	    free(new_string);
 	    va_end(args);
 	    return;
@@ -178,7 +158,7 @@ namespace utils
 	    char *new_string = (char*)malloc(length);
 	    snprintf(new_string, length, "%s%s", info, _text);
 	    
-	    message(colours::colour::black, colours::colour::none, new_string, args);
+	    message(new_string, args);
 	    free(new_string);
 	    va_end(args);
 	    return;
@@ -192,7 +172,7 @@ namespace utils
 	    char *new_string = (char*)malloc(length);
 	    snprintf(new_string, length, "%s%s", log, _text);
 	    
-	    message(colours::colour::cyan, colours::colour::none, new_string, args);
+	    message(new_string, args);
 	    free(new_string);
 	    va_end(args);
 	    return;

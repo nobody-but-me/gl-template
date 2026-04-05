@@ -189,7 +189,6 @@ namespace renderer
 	{
 	    utils::log::error("renderer.cpp::init() : Failed to set main object shader view uniform variable.");
 	}
-	
 	// NOTE: bad: kinda hard-coded; It would be better if, after calling the rect initialize function, the code indentified if the global quad was already loaded or not.
 	init_global_quad();
 	return;
