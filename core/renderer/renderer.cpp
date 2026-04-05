@@ -107,7 +107,7 @@ namespace renderer
 	trans = glm::rotate(trans, glm::radians(_object->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 	trans = glm::translate(trans, glm::vec3(-0.5f * _object->scale.x, -0.5f * _object->scale.y, 0.0f ));
 	
-	trans = glm::scale(trans, glm::vec3(_object->scale, 1.0f));
+	trans = glm::scale(trans, glm::vec3(_object->scale.x,_object->scale.y, 1.0f));
 	
 	if (molson(set_matrix4)("transform", &trans, false, g_main_object_shader) != 0)
 	{

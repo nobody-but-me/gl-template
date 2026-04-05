@@ -13,6 +13,8 @@
 #include <utils/input.hpp>
 #include <math/math.hpp>
 
+using namespace math::vectors;
+
 namespace application
 {
     
@@ -23,14 +25,15 @@ namespace application
     
     static void update_player_sprite_position(void)
     {
-	player.position = glm::vec2(player_hitbox.position.x - 1.5f, player_hitbox.position.y - 0.5f);
+	// player.position = glm::vec2(player_hitbox.position.x - 1.5f, player_hitbox.position.y - 0.5f);
+	player.position = vector2(player_hitbox.position.x - 1.5f, player_hitbox.position.y - 0.5f);
 	return;
     }
     
     
     constexpr float GRAVITY = 1.0f;
     
-    glm::vec2 velocity = glm::vec2(0.0f,0.0f);
+    vec2 velocity = vector2(0.0f,0.0f);
     float acceleration = 0.03f;
     float friction = 0.03f;
     float speed = 10.0f;
@@ -59,7 +62,6 @@ namespace application
 	{
 	    velocity.x = math::lerp(velocity.x, 0.0f, friction);
 	}
-	
 	player_hitbox.position.x += velocity.x * _delta;
 	player_hitbox.position.y += velocity.y * _delta;
 	update_player_sprite_position();
@@ -109,24 +111,24 @@ namespace application
 	utils::resource_manager::init_rectangle(&floor, "offset", nullptr);
 	
 	player_hitbox.colour = glm::vec4(255.0f, 0.0f, 0.0f, 0.0f);
-	player_hitbox.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	player_hitbox.position = glm::vec2(5.0f, 0.0f);
-	player_hitbox.scale = glm::vec2(2.0f, 4.0f);
+	player_hitbox.rotation = vector3(0.0f, 0.0f, 0.0f);
+	player_hitbox.position = vector2(5.0f, 0.0f);
+	player_hitbox.scale = vector2(2.0f, 4.0f);
 	player_hitbox.z_index = -5;
 	
 	player.colour = glm::vec4(255.0f, 255.0f, 255.0f, 255.0f);
-	player.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	player.position = glm::vec2(player_hitbox.position.x - 1.5f, player_hitbox.position.y - 0.5f);
-	player.scale = glm::vec2(5.0f, 5.0f);
+	player.rotation = vector3(0.0f, 0.0f, 0.0f);
+	player.position = vector2(player_hitbox.position.x - 1.5f, player_hitbox.position.y - 0.5f);
+	player.scale = vector2(5.0f, 5.0f);
 	player.z_index = 0;
 	
 	player.animated = true;
 	player.rows  = 8; player.cols  = 8;
 	
 	floor.colour = glm::vec4(255.0f, 0.0f, 0.0f, 255.0f);
-	floor.rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	floor.position = glm::vec2(-4.5f, -4.5f);
-	floor.scale = glm::vec2(15.0f, 2.0f);
+	floor.rotation = vector3(0.0f, 0.0f, 0.0f);
+	floor.position = vector2(-4.5f, -4.5f);
+	floor.scale = vector2(15.0f, 2.0f);
 	floor.z_index = 0;
 	
 	utils::resource_manager::init_animation(&walking , "walking_anim" , animation_type::loop, 3, 0, false);

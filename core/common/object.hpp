@@ -11,6 +11,7 @@
 #include <utils/singleton.hpp>
 #include <common/enums.hpp>
 #include <libs/molson.h>
+#include <math/math.hpp>
 
 class object: public singleton<object>
 {
@@ -29,9 +30,9 @@ class object: public singleton<object>
 	
 	int z_index;
 	
-	glm::vec2 position;
-	glm::vec3 rotation;
-	glm::vec2 scale;
+	math::vectors::vec2 position;
+	math::vectors::vec3 rotation;
+	math::vectors::vec2 scale;
 	
 	std::string name;
 	

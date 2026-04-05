@@ -42,6 +42,49 @@ namespace math
 	}
     }
     
+    
+    namespace vectors
+    {
+	dvec2 vector2(double x,double y) { return (dvec2){x, y}; }
+	vec2 vector2(float x,float y) { return (vec2){x, y}; }
+	ivec2 vector2(int x,int y) { return (ivec2){x, y}; }
+	
+	dvec3 vector3(double x,double y,double z) { return (dvec3){x, y, z}; }
+	vec3 vector3(float x,float y,float z) { return (vec3){x, y, z}; }
+	ivec3 vector3(int x,int y,int z) { return (ivec3){x, y, z}; }
+	
+	vec2 add_vec2(vec2 a,vec2 b) { return vector2(a.x + b.x, a.y + b.y); }
+	vec2 sub_vec2(vec2 a,vec2 b) { return vector2(a.x - b.x, a.y - b.y); }
+	vec2 mul_vec2(vec2 a,vec2 b) { return vector2(a.x * b.x, a.y * b.y); }
+	vec2 div_vec2(vec2 a,vec2 b) { return vector2(a.x / b.x, a.y / b.y); }
+	
+	ivec2 add_vec2(ivec2 a,ivec2 b) { return vector2(a.x + b.x, a.y + b.y); }
+	ivec2 sub_vec2(ivec2 a,ivec2 b) { return vector2(a.x - b.x, a.y - b.y); }
+	ivec2 mul_vec2(ivec2 a,ivec2 b) { return vector2(a.x * b.x, a.y * b.y); }
+	ivec2 div_vec2(ivec2 a,ivec2 b) { return vector2(a.x / b.x, a.y / b.y); }
+	
+	dvec2 add_vec2(dvec2 a,dvec2 b) { return vector2(a.x + b.x, a.y + b.y); }
+	dvec2 sub_vec2(dvec2 a,dvec2 b) { return vector2(a.x - b.x, a.y - b.y); }
+	dvec2 mul_vec2(dvec2 a,dvec2 b) { return vector2(a.x * b.x, a.y * b.y); }
+	dvec2 div_vec2(dvec2 a,dvec2 b) { return vector2(a.x / b.x, a.y / b.y); }
+	
+	vec3 add_vec3(vec3 a,vec3 b) { return vector3(a.x + b.x, a.y + b.y, a.z + b.z); }
+	vec3 sub_vec3(vec3 a,vec3 b) { return vector3(a.x - b.x, a.y - b.y, a.z - b.z); }
+	vec3 mul_vec3(vec3 a,vec3 b) { return vector3(a.x * b.x, a.y * b.y, a.z * b.z); }
+	vec3 div_vec3(vec3 a,vec3 b) { return vector3(a.x / b.x, a.y / b.y, a.z / b.z); }
+	
+	ivec3 add_vec3(ivec3 a,ivec3 b) { return vector3(a.x + b.x, a.y + b.y, a.z + b.z); }
+	ivec3 sub_vec3(ivec3 a,ivec3 b) { return vector3(a.x - b.x, a.y - b.y, a.z - b.z); }
+	ivec3 mul_vec3(ivec3 a,ivec3 b) { return vector3(a.x * b.x, a.y * b.y, a.z * b.z); }
+	ivec3 div_vec3(ivec3 a,ivec3 b) { return vector3(a.x / b.x, a.y / b.y, a.z / b.z); }
+	
+	dvec3 add_vec3(dvec3 a,dvec3 b) { return vector3(a.x + b.x, a.y + b.y, a.z + b.z); }
+	dvec3 sub_vec3(dvec3 a,dvec3 b) { return vector3(a.x - b.x, a.y - b.y, a.z - b.z); }
+	dvec3 mul_vec3(dvec3 a,dvec3 b) { return vector3(a.x * b.x, a.y * b.y, a.z * b.z); }
+	dvec3 div_vec3(dvec3 a,dvec3 b) { return vector3(a.x / b.x, a.y / b.y, a.z / b.z); }
+    }
+    
+    
     float lerp(float x, float y, float t) { return (1.0f - t) * x + t * y; }
     
     double lerpd(double x, double y, double t) { return (1.0f - t) * x + t * y; }
