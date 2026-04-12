@@ -20,8 +20,12 @@ namespace utils
 	void init_animation(animation *_animation, std::string _animation_name, animation_type _animation_type, unsigned int _delay, unsigned int _init_frame, bool _autoplay,bool _verbose=true);
 	void load_shader(shader *_shader, const char *_shader_name, const char *_vertex_shader_path, const char *_fragment_shader_path,bool _verbose=true);
 	void load_texture(texture *_texture, std::string _texture_name, std::string _texture_path, bool _alpha,bool _verbose=true);
-	void init_rectangle(object *_rectangle, std::string _object_name, texture *_texture,bool _verbose=true);
-
+	
+	// NOTE : these verbose parameters are appendages for now.
+	void init_generic(object *_object,texture*_texture,object_type _type, std::string _name);
+	void init_rectangle(object *_rect, texture *_texture, std::string _name,bool _verbose=true);
+	void init_circle(object*_rect,texture*_texture,std::string _name,bool _verbose=true);
+	
 	void remove_animation(animation*_animation,bool _verbose=true);
 	void remove_texture(texture*_texture,bool _verbose=true);
 	void remove_object(object*_object,bool _verbose=true);

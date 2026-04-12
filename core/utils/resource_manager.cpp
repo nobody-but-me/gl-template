@@ -196,10 +196,22 @@ namespace utils
 	    return;
 	}
 	
-	void init_rectangle(object *_rectangle, std::string _object_name, texture *_texture,bool _verbose)
+	void init_generic(object *_object,texture*_texture,object_type _type,std::string _name)
 	{
-	    renderer::init_rect(_rectangle, _texture, _object_name);
-	    g_objects.emplace_back(_rectangle);
+	    renderer::init_object(_object,_texture,_type,_name);
+	    g_objects.emplace_back(_object);
+	    return;
+	}
+	void init_rectangle(object *_rect, texture *_texture, std::string _name,bool _verbose)
+	{
+	    renderer::init_object(_rect,_texture,object_type::QUAD,_name);
+	    g_objects.emplace_back(_rect);
+	    return;
+	}
+	void init_circle(object*_circle,texture*_texture,std::string _name,bool _verbose)
+	{
+	    renderer::init_object(_circle,_texture,object_type::CIRCLE,_name);
+	    g_objects.emplace_back(_circle);
 	    return;
 	}
 	

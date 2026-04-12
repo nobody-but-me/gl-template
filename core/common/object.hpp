@@ -38,19 +38,17 @@ class object: public singleton<object>
 	
 	glm::vec4 colour;
 	
-	bool selected = false;
-	
 	void set_initialized(bool new_initialized)	    { this->m_initialized = new_initialized; }
 	void set_transform(glm::mat4 new_transform)	    { this->m_transform = new_transform; }
 	void set_indices(unsigned int new_indices)	    { this->m_indices = new_indices; }
 	void set_texture(texture *new_texture)		    { this->m_texture = new_texture; }
 	void set_type(object_type new_type)		    { this->m_type = new_type; }
 	
-	bool get_initialized()		{ return this->m_initialized; }
-	glm::mat4 get_transform()	{ return this->m_transform; }
-	texture *get_texture()		{ return this->m_texture; }
-	unsigned int get_indices()	{ return this->m_indices; }
-	object_type get_type()		{ return this->m_type; }
+	bool get_initialized(void)	{ return this->m_initialized; }
+	glm::mat4 get_transform(void)	{ return this->m_transform; }
+	texture *get_texture(void)	{ return this->m_texture; }
+	unsigned int get_indices(void)	{ return this->m_indices; }
+	object_type get_type(void)	{ return this->m_type; }
 	
 };
 

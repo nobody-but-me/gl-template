@@ -32,7 +32,7 @@ namespace renderer
     
     int init_global_quad(void);
     
-    int init_rect(object *_object, texture *texture, std::string _name);
+    void init_object(object*_object,texture*_texture,object_type _object_type,std::string _name);
     
     int set_object_transform(object *_object);
     void render_object(object *_object);

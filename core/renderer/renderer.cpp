@@ -77,21 +77,14 @@ namespace renderer
 	return check_gl_errors();
     }
     
-    int init_rect(object *_object, texture *_texture, std::string _name)
+    void init_object(object*_object,texture*_texture,object_type _object_type,std::string _name)
     {
-	_object->set_type(object_type::QUAD);
-	_object->name = _name;
+	_object->set_type(_object_type);
+	_object->name=_name;
+	_object->set_texture(_texture!=nullptr ? _texture : nullptr);
 	
-	if (_texture != nullptr)
-	{
-	    _object->set_texture(_texture);
-	}
-	else
-	{
-	    _object->set_texture(nullptr);
-	}
 	_object->set_initialized(true);
-	return 0;
+	return;
     }
     
     int set_object_transform(object *_object)
@@ -152,9 +145,16 @@ namespace renderer
 	    }
 	}
 	
+	// ray = 50.0f;
+	// filled = false;
+	// line_width = 5.0f;
+	// flashlight = true;
+	
+	// TODO : hardcoded circle;
 	switch (object_type)
 	{
 	    case object_type::QUAD:
+		molson(set_bool)("circle",false, g_main_object_shader);
 		glBindVertexArray(g_QUAD_VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);
@@ -162,7 +162,13 @@ namespace renderer
 	    case object_type::TRIANGLE:
 		utils::log::todo("triangle is still not implemented.\n");
 		break;
+	    case object_type::CIRCLE:
+		molson(set_bool)("circle", true, g_main_object_shader);
 		
+		glBindVertexArray(g_QUAD_VAO);
+		glDrawArrays(GL_TRIANGLES,0,6);
+		glBindVertexArray(0);
+		break;
 	}
 	return;
     }

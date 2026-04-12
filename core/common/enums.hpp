@@ -61,6 +61,7 @@ enum class animation_type
 enum class object_type
 {
     TRIANGLE,
+    CIRCLE,
     QUAD
 };
 

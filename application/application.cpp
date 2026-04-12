@@ -19,9 +19,10 @@ namespace application
 {
     
     object player, player_hitbox, floor;
+    object circle;
     animation walking;
     
-    texture texture;
+    texture texture,circle_texture;
     
     static void update_player_sprite_position(void)
     {
@@ -104,11 +105,20 @@ namespace application
     void ready(void)
     {
 	utils::resource_manager::load_texture(&texture, "player_sprite", "../../application/res/sprites/sprite_sheet.png", true);
+	utils::resource_manager::load_texture(&circle_texture,"circle_texture","../../application/res/sprites/m.png",true);
 	
 	utils::resource_manager::init_rectangle(&player, "player", &texture);
 	
 	utils::resource_manager::init_rectangle(&player_hitbox, "player_hitbox", nullptr);
 	utils::resource_manager::init_rectangle(&floor, "offset", nullptr);
+	
+	utils::resource_manager::init_generic(&circle,&circle_texture,object_type::CIRCLE,"circle");
+	
+	circle.colour = glm::vec4(255.0f, 255.0f, 255.0f, 255.0f);
+	circle.rotation = vector3(0.0f, 0.0f, 0.0f);
+	circle.position = vector2(-4.0f, 2.5f);
+	circle.scale = vector2(5.0f, 5.0f);
+	circle.z_index = -5;
 	
 	player_hitbox.colour = glm::vec4(255.0f, 0.0f, 0.0f, 0.0f);
 	player_hitbox.rotation = vector3(0.0f, 0.0f, 0.0f);
@@ -136,11 +146,6 @@ namespace application
 	///   sheet loaded by this object. This will be useful when the game engine have a visual animation timeline where
 	/// you will be able to set up the frames visually, just like in game engines like unity and godot, for example.
 	walking.set_frames({ 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 1 });
-	
-	object test;
-	utils::resource_manager::init_rectangle(&test, "test", nullptr);
-	
-	utils::resource_manager::remove_object(&test);
 	
 	player.anim = walking;
 	player.anim.play();
