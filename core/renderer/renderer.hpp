@@ -37,7 +37,7 @@ namespace renderer
     int set_object_transform(object *_object);
     void render_object(object *_object);
     
-    void init(void);
+    int init(void);
 }
 
 

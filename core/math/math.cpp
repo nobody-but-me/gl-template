@@ -10,7 +10,7 @@ namespace math
     
     namespace delta
     {
-	constexpr double MAX_FRAMERATE = 60.0f;
+	constexpr double MAX_FRAMERATE = 120.0f;
 	
 	double previous_time = 0.0f;
 	double current_time = 0.0f;

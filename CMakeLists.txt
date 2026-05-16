@@ -20,6 +20,7 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
 	${CMAKE_SOURCE_DIR}/core/renderer/*.cpp
 	${CMAKE_SOURCE_DIR}/core/physics/*.cpp
 	${CMAKE_SOURCE_DIR}/core/backend/*.cpp
+	${CMAKE_SOURCE_DIR}/core/common/*.cpp
 	${CMAKE_SOURCE_DIR}/core/editor/*.cpp
 	${CMAKE_SOURCE_DIR}/core/utils/*.cpp
 	${CMAKE_SOURCE_DIR}/core/audio/*.cpp

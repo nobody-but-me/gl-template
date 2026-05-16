@@ -28,7 +28,7 @@ namespace backend
     }
     void destroy_application(void)
     {
-	utils::log::info("backend.cpp::destroy_application() : Destroying application...");
+	utils::log::info("backend.cpp::destroy_application() : destroying application...\n");
 
 	editor::destroy();
 	gl::destroy();
@@ -45,13 +45,17 @@ namespace backend
 	if (gl::init(_window_mode) == -1) return -1;
 	
 	utils::resource_manager::load_shader(&main_shader, "main_shader", SHADER_PATH"object.vert", SHADER_PATH"object.frag");
-
-	renderer::init();
+	
+	if (renderer::init()!=0)
+	{
+	    utils::log::fatal("failed to initialize renderer.\n");
+	    return -1;
+	}
 	utils::input_manager::init(gl::get_current_window());
 	application::ready();
 	
 	editor::init(gl::get_current_window());
-	utils::log::info("backend.cpp::init() : backend initialized successfully.");
+	utils::log::info("backend.cpp::init() : backend initialized successfully.\n");
 	utils::log::note("Hello, World!\n");
 	return 0;
     }
@@ -70,7 +74,6 @@ namespace backend
 	begin_frame();
 	if (utils::input_manager::is_key_pressed(KEY_ESC))
 	    force_window_close();
-	
 	math::delta::calculate_delta();
 	while (math::delta::is_frametiming())
 	{
@@ -84,7 +87,7 @@ namespace backend
     void render(void)
     {
 	utils::resource_manager::render_objects();
-	utils::resource_manager::play_animations();
+	// utils::resource_manager::play_animations();
 	editor::render();
 	return;
     }

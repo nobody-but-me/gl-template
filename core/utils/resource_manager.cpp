@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstring>
 #include <string>
+#include <memory>
 #include <vector>
 
 #include <libs/glad.h>
@@ -19,52 +20,125 @@ namespace utils
 {
     namespace resource_manager
     {
+	std::unordered_map<std::string,std::shared_ptr<animation>> g_animations;
+	std::unordered_map<std::string,std::shared_ptr<texture>> g_textures;
+	std::unordered_map<std::string,std::shared_ptr<object>> g_objects;
 	
-	std::vector<animation*> g_animations;
-	std::vector<texture*> g_textures;
+	void init_texture(std::string _texture_name, std::string _texture_path, bool _alpha,bool _verbose)
+	{
+	    if (_texture_path == "")
+	    {
+		if (_verbose)
+		{
+		    utils::log::error("resource_manager.cpp::init_texture() : can't intialize texture without a path.\n");
+		}
+		return;
+	    }
+	    // std::shared_ptr<texture> _texture(molson(load_texture)(_texture_name.c_str(), _texture_path.c_str(), _alpha));
+	    std::shared_ptr<texture> _texture = std::make_shared<texture>(molson(load_texture)(_texture_name.c_str(), _texture_path.c_str(), _alpha));
+	    g_textures.insert({_texture_name,_texture});
+	    if (g_textures[_texture_name]==nullptr)
+	    {
+		if(_verbose)
+		{
+		    utils::log::error("resource_manager.cpp::init_texture() : failed to insert newly created texture into global vector.\n");
+		}
+		return;
+	    }
+	    // texture*_tex=_texture.get();
+	    // texture t=molson(load_texture)(_texture_name.c_str(), _texture_path.c_str(), _alpha);
+	    if(_verbose)
+	    {
+		utils::log::info("resource_manager.cpp::init_texture() : texture created successfully.\n");
+	    }
+	    return;
+	}
+	texture*get_texture(std::string _texture_name)
+	{
+	    return g_textures[_texture_name].get();
+	}
+	void delete_texture(std::string _texture_name,bool _verbose)
+	{
+	    g_textures.erase(_texture_name);
+	    return;
+	}
+	
+	animation*get_animation(std::string _name,bool _verbose)
+	{
+	    return g_animations[_name].get();
+	}
+	void delete_animation(std::string _animation_name,bool _verbose)
+	{
+	    g_animations.erase(_animation_name);
+	    return;
+	}
+	void init_animation(std::string _name,animation_type _type,int _delay,std::vector<unsigned int> _frames,bool _verbose)
+	{
+	    std::shared_ptr<animation> _anim(new animation());
+	    g_animations.insert({_name,_anim});
+	    if (g_animations[_name]==nullptr)
+	    {
+		if (_verbose)
+		{
+		    utils::log::error("resource_manager.cpp::init_animation() : failed to init animation.\n");
+		}
+		return;
+	    }
+	    animation *a=g_animations[_name].get();
+	    a->name=_name; a->set_animation_type(_type);
+	    a->set_frames(_frames);
+	    a->set_delay(_delay);
+	    
+	    if (_verbose)
+	    {
+		utils::log::info("resource_manager.cpp::init_animation() : animation created successfully.\n");
+	    }
+	    return;
+	}
+	
+	void init_generic(std::string _object_name,texture*_texture,object_type _object_type,bool _verbose);
+	void init_quad(std::string _object_name,texture*_texture,bool _verbose)
+	{
+	    std::shared_ptr<object> _object(new object());
+	    g_objects.insert({_object_name,_object});
+	    if (g_objects[_object_name]==nullptr)
+	    {
+		if (_verbose)
+		{
+		    utils::log::error("resource_manager.cpp::init_quad() : failed to init quad.\n");
+		}
+		return;
+	   } 
+	    renderer::init_object(_object.get(),_texture,object_type::QUAD,_object_name);
+	    if (_verbose)
+	    {
+		utils::log::info("resource_manager.cpp::init_quad() : object created successfully.\n");
+	    }
+	    return;
+	}
+	
+	object*get_object(std::string _object_name)
+	{
+	    return g_objects[_object_name].get();
+	}
+	void delete_object(std::string _object_name,bool _verbose)
+	{
+	    g_objects.erase(_object_name);
+	    return;
+	}
+	
+	void render_objects(void)
+	{
+	    for (auto &it : g_objects)
+	    {
+		object*_obj=get_object(it.first);
+		renderer::render_object(_obj);
+	    }
+	    return;
+	}
+	
+	// NOTE: legacy way to do that because I am extremly lazy
 	std::vector<shader*> g_shaders;
-	std::vector<object*> g_objects;
-	
-	animation *get_animation(std::string _animation_name,bool _verbose)
-	{
-	    auto _animation = std::find_if(g_animations.begin(), g_animations.end(), [&](const animation *anim) { return anim->name == _animation_name; });
-	    if (_animation != g_animations.end())
-	    {
-		if(_verbose)
-		{
-		    utils::log::info("resource_manager.cpp::get_animation() : %s animation had been found successfully",_animation_name);
-		}
-		return *_animation;
-	    }
-	    else
-	    {
-		if(_verbose)
-		{
-		    utils::log::error("resource_manager.cpp::get_animation() : %s animation not found.",_animation_name);
-		}
-		return NULL;
-	    }
-	}
-	texture *get_texture(std::string _texture_name,bool _verbose)
-	{
-	    auto _texture = std::find_if(g_textures.begin(), g_textures.end(), [&](const texture *tex) { return tex->name == _texture_name; });
-	    if (_texture != g_textures.end())
-	    {
-		if(_verbose)
-		{
-		    utils::log::info("resource_manager.cpp::get_texture() : %s texture had been found successfully",_texture_name);
-		}
-		return *_texture;
-	    }
-	    else
-	    {
-		if(_verbose)
-		{
-		    utils::log::error("resource_manager.cpp::get_texture() : %s texture not found.",_texture_name);
-		}
-		return NULL;
-	    }
-	}
 	shader *get_shader(std::string _shader_program_name,bool _verbose)
 	{
 	    auto _shader = std::find_if(g_shaders.begin(), g_shaders.end(), [&](const shader *shdr) { return shdr->name == _shader_program_name; });
@@ -85,102 +159,6 @@ namespace utils
 		return NULL;
 	    }
 	}
-	object *get_object(std::string _object_name,bool _verbose)
-	{
-	    auto _object = std::find_if(g_objects.begin(), g_objects.end(), [&](const object *obj) { return obj->name == _object_name; });
-	    if (_object != g_objects.end())
-	    {
-		if(_verbose)
-		{
-		    utils::log::info("resource_manager.cpp::get_object() : %s object had been found successfully",_object_name);
-		}
-		return *_object;
-	    }
-	    else
-	    {
-		if(_verbose)
-		{
-		    utils::log::error("resource_manager.cpp::get_object() : %s object not found.",_object_name);
-		}
-		return NULL;
-	    }
-	}
-	
-	// TODO: write the other functions here;
-	void remove_animation(animation*_animation,bool _verbose)
-	{
-	    if (get_animation(_animation->name)==NULL)
-	    {
-		if (_verbose)
-		{
-		    utils::log::error("resource_manager.cpp::remove_animation() : Failed to remove %s animation: animmation not found.",_animation->name.c_str());
-		}
-		return;
-	    }
-	    g_animations.erase(std::remove(g_animations.begin(),g_animations.end(),_animation),g_animations.end());
-	    
-	    if (get_animation(_animation->name)==NULL)
-	    {
-		if (_verbose)
-		{
-		    utils::log::info("resource_manager.cpp::remove_animation() : %s animation removed successfully.",_animation->name.c_str());
-		}
-		return;
-	    }
-	    return;
-	}
-	void remove_texture(texture*_texture,bool _verbose);
-	void remove_object(object*_object,bool _verbose)
-	{
-	    if (get_object(_object->name)==NULL)
-	    {
-		if (_verbose)
-		{
-		    utils::log::error("resource_manager.cpp::remove_object() : Failed to remove %s object: object not found.",_object->name.c_str());
-		}
-		return;
-	    }
-	    g_objects.erase(std::remove(g_objects.begin(),g_objects.end(),_object),g_objects.end());
-	    
-	    if (get_object(_object->name)==NULL)
-	    {
-		if (_verbose)
-		{
-		    utils::log::info("resource_manager.cpp::remove_object() : %s object removed successfully.",_object->name.c_str());
-		}
-		return;
-	    }
-	    return;
-	}
-	void remove_shader(shader*_shader,bool _verbose);
-	
-	// TODO: ensure that there are not already other objects with the same name in the vectors.
-	void init_animation(animation *_animation, std::string _animation_name, animation_type _animation_type, unsigned int _delay, unsigned int _init_frame, bool _autoplay,bool _verbose)
-	{
-	    _animation->name = _animation_name;
-	    
-	    _animation->set_animation_type(_animation_type);
-	    _animation->set_autoplay(_autoplay);
-	    _animation->set_index(_init_frame);
-	    _animation->set_delay(_delay);
-	    
-	    if (_autoplay == true)
-	    {
-		_animation->set_is_playing(true);
-	    }
-	    g_animations.emplace_back(_animation);
-	    return;
-	}
-	void load_texture(texture *_texture, std::string _texture_name, std::string _texture_path, bool _alpha = true,bool _verbose)
-	{
-	    if (_texture_path == "")
-	    {
-		return;
-	    }
-	    *_texture = molson(load_texture)(_texture_name.c_str(), _texture_path.c_str(), _alpha);
-	    g_textures.emplace_back(_texture);
-	    return;
-	}
 	void load_shader(shader *_shader, const char *_shader_name, const char *_vertex_shader_path, const char *_fragment_shader_path,bool _verbose)
 	{
 	    if ((strcmp("", _fragment_shader_path)) == 0)
@@ -196,49 +174,191 @@ namespace utils
 	    return;
 	}
 	
-	void init_generic(object *_object,texture*_texture,object_type _type,std::string _name)
-	{
-	    renderer::init_object(_object,_texture,_type,_name);
-	    g_objects.emplace_back(_object);
-	    return;
-	}
-	void init_rectangle(object *_rect, texture *_texture, std::string _name,bool _verbose)
-	{
-	    renderer::init_object(_rect,_texture,object_type::QUAD,_name);
-	    g_objects.emplace_back(_rect);
-	    return;
-	}
-	void init_circle(object*_circle,texture*_texture,std::string _name,bool _verbose)
-	{
-	    renderer::init_object(_circle,_texture,object_type::CIRCLE,_name);
-	    g_objects.emplace_back(_circle);
-	    return;
-	}
+	// std::vector<animation*> g_animations;
+	// std::vector<texture*> g_textures;
+	// std::vector<object*> g_objects;
 	
-	void play_animations(void)
-	{
-	    for (animation *anim : g_animations)
-	    {
-		if (anim->get_is_playing())
-		{
-		    anim->process();
-		}
-		else
-		{
-		    anim->stop();
-		}
-	    }
-	    return;
-	}
+	// animation *get_animation(std::string _animation_name,bool _verbose)
+	// {
+	//     auto _animation = std::find_if(g_animations.begin(), g_animations.end(), [&](const animation *anim) { return anim->name == _animation_name; });
+	//     if (_animation != g_animations.end())
+	//     {
+	// 	if(_verbose)
+	// 	{
+	// 	    utils::log::info("resource_manager.cpp::get_animation() : %s animation had been found successfully",_animation_name);
+	// 	}
+	// 	return *_animation;
+	//     }
+	//     else
+	//     {
+	// 	if(_verbose)
+	// 	{
+	// 	    utils::log::error("resource_manager.cpp::get_animation() : %s animation not found.",_animation_name);
+	// 	}
+	// 	return NULL;
+	//     }
+	// }
+	// texture *get_texture(std::string _texture_name,bool _verbose)
+	// {
+	//     auto _texture = std::find_if(g_textures.begin(), g_textures.end(), [&](const texture *tex) { return tex->name == _texture_name; });
+	//     if (_texture != g_textures.end())
+	//     {
+	// 	if(_verbose)
+	// 	{
+	// 	    utils::log::info("resource_manager.cpp::get_texture() : %s texture had been found successfully",_texture_name);
+	// 	}
+	// 	return *_texture;
+	//     }
+	//     else
+	//     {
+	// 	if(_verbose)
+	// 	{
+	// 	    utils::log::error("resource_manager.cpp::get_texture() : %s texture not found.",_texture_name);
+	// 	}
+	// 	return NULL;
+	//     }
+	// }
 	
-	void render_objects(void)
-	{
-	    for (object *obj : g_objects)
-	    {
-		renderer::render_object(obj);
-	    }
-	    return;
-	}
+	// object *get_object(std::string _object_name,bool _verbose)
+	// {
+	//     auto _object = std::find_if(g_objects.begin(), g_objects.end(), [&](const object *obj) { return obj->name == _object_name; });
+	//     if (_object != g_objects.end())
+	//     {
+	// 	if(_verbose)
+	// 	{
+	// 	    utils::log::info("resource_manager.cpp::get_object() : %s object had been found successfully",_object_name);
+	// 	}
+	// 	return *_object;
+	//     }
+	//     else
+	//     {
+	// 	if(_verbose)
+	// 	{
+	// 	    utils::log::error("resource_manager.cpp::get_object() : %s object not found.",_object_name);
+	// 	}
+	// 	return NULL;
+	//     }
+	// }
+	
+	// // TODO: write the other functions here;
+	// void remove_animation(animation*_animation,bool _verbose)
+	// {
+	//     if (get_animation(_animation->name)==NULL)
+	//     {
+	// 	if (_verbose)
+	// 	{
+	// 	    utils::log::error("resource_manager.cpp::remove_animation() : Failed to remove %s animation: animmation not found.",_animation->name.c_str());
+	// 	}
+	// 	return;
+	//     }
+	//     g_animations.erase(std::remove(g_animations.begin(),g_animations.end(),_animation),g_animations.end());
+	    
+	//     if (get_animation(_animation->name)==NULL)
+	//     {
+	// 	if (_verbose)
+	// 	{
+	// 	    utils::log::info("resource_manager.cpp::remove_animation() : %s animation removed successfully.",_animation->name.c_str());
+	// 	}
+	// 	return;
+	//     }
+	//     return;
+	// }
+	// void remove_texture(texture*_texture,bool _verbose);
+	// void remove_object(object*_object,bool _verbose)
+	// {
+	//     if (get_object(_object->name)==NULL)
+	//     {
+	// 	if (_verbose)
+	// 	{
+	// 	    utils::log::error("resource_manager.cpp::remove_object() : Failed to remove %s object: object not found.",_object->name.c_str());
+	// 	}
+	// 	return;
+	//     }
+	//     g_objects.erase(std::remove(g_objects.begin(),g_objects.end(),_object),g_objects.end());
+	    
+	//     if (get_object(_object->name)==NULL)
+	//     {
+	// 	if (_verbose)
+	// 	{
+	// 	    utils::log::info("resource_manager.cpp::remove_object() : %s object removed successfully.",_object->name.c_str());
+	// 	}
+	// 	return;
+	//     }
+	//     return;
+	// }
+	// void remove_shader(shader*_shader,bool _verbose);
+	
+	// // TODO: ensure that there are not already other objects with the same name in the vectors.
+	// void init_animation(animation *_animation, std::string _animation_name, animation_type _animation_type, unsigned int _delay, unsigned int _init_frame, bool _autoplay,bool _verbose)
+	// {
+	//     _animation->name = _animation_name;
+	    
+	//     _animation->set_animation_type(_animation_type);
+	//     _animation->set_autoplay(_autoplay);
+	//     _animation->set_index(_init_frame);
+	//     _animation->set_delay(_delay);
+	    
+	//     if (_autoplay == true)
+	//     {
+	// 	_animation->set_is_playing(true);
+	//     }
+	//     g_animations.emplace_back(_animation);
+	//     return;
+	// }
+	// void load_texture(texture *_texture, std::string _texture_name, std::string _texture_path, bool _alpha = true,bool _verbose)
+	// {
+	//     if (_texture_path == "")
+	//     {
+	// 	return;
+	//     }
+	//     *_texture = molson(load_texture)(_texture_name.c_str(), _texture_path.c_str(), _alpha);
+	//     g_textures.emplace_back(_texture);
+	//     return;
+	// }
+	
+	// void init_generic(object *_object,texture*_texture,object_type _type,std::string _name)
+	// {
+	//     renderer::init_object(_object,_texture,_type,_name);
+	//     g_objects.emplace_back(_object);
+	//     return;
+	// }
+	// void init_rectangle(object *_rect, texture *_texture, std::string _name,bool _verbose)
+	// {
+	//     renderer::init_object(_rect,_texture,object_type::QUAD,_name);
+	//     g_objects.emplace_back(_rect);
+	//     return;
+	// }
+	// void init_circle(object*_circle,texture*_texture,std::string _name,bool _verbose)
+	// {
+	//     renderer::init_object(_circle,_texture,object_type::CIRCLE,_name);
+	//     g_objects.emplace_back(_circle);
+	//     return;
+	// }
+	
+	// void play_animations(void)
+	// {
+	//     for (animation*anim : g_animations)
+	//     {
+	// 	if (anim->get_is_playing())
+	// 	{
+	// 	    anim->process();
+	// 	}
+	// 	else
+	// 	{
+	// 	    anim->stop();
+	// 	}
+	//     }
+	//     return;
+	// }
+	
+	// void render_objects(void)
+	// {
+	//     for (object *obj : g_objects)
+	//     {
+	// 	renderer::render_object(obj);
+	//     }
+	//     return;
+	// }
 	
     }
 }

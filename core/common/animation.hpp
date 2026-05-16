@@ -48,10 +48,10 @@ class animation: public singleton<animation>
 	unsigned int get_delay(void) { return this->m_delay_length; }
 	unsigned int get_index(void) { return this->m_index; }
 	
-	void set_frames(std::vector<unsigned int>_new_frames) { this->m_frames = _new_frames; }
-	void set_animation_type(animation_type _new_type)     { this->m_type = _new_type; }
 	void set_delay(unsigned int _new_delay)               { this->m_delay_length = _new_delay; }
+	void set_frames(std::vector<unsigned int>_new_frames) { this->m_frames = _new_frames; }
 	void set_index(unsigned int _new_index)               { this->m_index = _new_index; }
+	void set_animation_type(animation_type _new_type)     { this->m_type = _new_type; }
 	
 	void process(void)
 	{

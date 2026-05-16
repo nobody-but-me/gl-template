@@ -77,6 +77,7 @@ namespace renderer
 	return check_gl_errors();
     }
     
+    // TODO: change the place of this functions; seems kinda off here.
     void init_object(object*_object,texture*_texture,object_type _object_type,std::string _name)
     {
 	_object->set_type(_object_type);
@@ -115,6 +116,8 @@ namespace renderer
 	object_type object_type = _object->get_type();
 	molson(use_shader)(g_main_object_shader);
 	
+	_object->current_animation->process(); // NOTE: likely not the best approach
+	
 	float colour[] = { _object->colour.x / 255, _object->colour.y / 255, _object->colour.z / 255, _object->colour.w / 255 };
 	if ((molson(set_vector4_f)("colour", colour, false, g_main_object_shader)) != 0)
 	{
@@ -135,12 +138,11 @@ namespace renderer
 	    glActiveTexture(GL_TEXTURE0);
 	    glBindTexture(GL_TEXTURE_2D, object_texture->id);
 	    
-
-	    if (_object->animated)
+	    if(_object->is_animated())
 	    {
-		molson(set_int)("index", _object->anim.get_index(), true, g_main_object_shader);
-		molson(set_int)("columns", _object->cols, true, g_main_object_shader);
-		molson(set_int)("rows", _object->rows, true, g_main_object_shader);
+		molson(set_int)("index", _object->current_animation->get_index(), true, g_main_object_shader);
+		molson(set_int)("columns", _object->get_cols(), true, g_main_object_shader);
+		molson(set_int)("rows", _object->get_rows(), true, g_main_object_shader);
 		molson(set_bool)("is_animated", true, g_main_object_shader);
 	    }
 	}
@@ -173,10 +175,16 @@ namespace renderer
 	return;
     }
 	
-    void init(void)
+    int init(void)
     {
 	// molson(init_shader)("main_shader", SHADER_PATH"object.vert", SHADER_PATH"object.frag", &g_main_object_shader);
 	g_main_object_shader = utils::resource_manager::get_shader("main_shader");
+	if(g_main_object_shader==NULL)
+	{
+	    // a real programmer would likely do these 'renderer.cpp::init()' dynamic...
+	    utils::log::fatal("renderer.cpp::init() : main object shader has failed to be loaded.\n");
+	    return -1;
+	}
 	
 	glm::mat4 projection = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
@@ -187,17 +195,19 @@ namespace renderer
 	projection = glm::ortho(win_width * -1.0f, win_width, win_height * -1.0f, win_height, -1.0f, 100.0f);
 	view  = glm::translate(view, glm::vec3(-3.0f, -2.5f, -50.0f)); // TODO: magic numbers.
 	
-	if ((molson(set_matrix4)("projection", &projection, true, g_main_object_shader)) != 0)
+	if ((molson(set_matrix4)("projection", &projection, true, g_main_object_shader)) != 0) // segmentation fault here
 	{
-	    utils::log::error("renderer.cpp::init() : Failed to set main object shader project uniform variable.");
+	    utils::log::error("renderer.cpp::init() : failed to set main object shader project uniform variable.\n");
+	    return -1;
 	}
 	if ((molson(set_matrix4)("view", &view, true, g_main_object_shader)) != 0)
 	{
-	    utils::log::error("renderer.cpp::init() : Failed to set main object shader view uniform variable.");
+	    utils::log::error("renderer.cpp::init() : failed to set main object shader view uniform variable.\n");
+	    return -1;
 	}
 	// NOTE: bad: kinda hard-coded; It would be better if, after calling the rect initialize function, the code indentified if the global quad was already loaded or not.
 	init_global_quad();
-	return;
+	return 0;
     }
 }
 

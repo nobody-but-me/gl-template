@@ -133,7 +133,7 @@ namespace gl
 	
 	if (g_window == NULL)
 	{
-	    utils::log::error("glfw_integration.cpp::init() : Failed to initialize window.");
+	    utils::log::error("glfw_integration.cpp::init() : failed to initialize window.\n");
 	    glfwTerminate();
 	    return -1;
 	}
@@ -141,7 +141,7 @@ namespace gl
 	int glad_version = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	if (!glad_version)
 	{
-	    utils::log::error("glfw_integration.cpp::init() : failed to initialize OpenGL context. The application is not glad at all.");
+	    utils::log::error("glfw_integration.cpp::init() : failed to initialize OpenGL context. The application is not glad at all.\n");
 	    glfwTerminate();
 	    return -1;
 	}
@@ -151,7 +151,7 @@ namespace gl
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_DEPTH_TEST);
 	
-	utils::log::info("glfw_integration.cpp::init() : Window had been configured successfully.");
+	utils::log::info("glfw_integration.cpp::init() : Window had been configured successfully.\n");
 	return 0;
     }
     void destroy(void)
