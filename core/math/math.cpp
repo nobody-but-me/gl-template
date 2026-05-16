@@ -53,6 +53,10 @@ namespace math
 	vec3 vector3(float x,float y,float z) { return (vec3){x, y, z}; }
 	ivec3 vector3(int x,int y,int z) { return (ivec3){x, y, z}; }
 	
+	dvec4 vector4(double x,double y,double z, double w) { return (dvec4){x, y, z, w}; }
+	vec4 vector4(float x,float y,float z, float w) { return (vec4){x, y, z, w}; }
+	ivec4 vector4(int x,int y,int z, int w) { return (ivec4){x, y, z, w}; }
+	
 	vec2 add_vec2(vec2 a,vec2 b) { return vector2(a.x + b.x, a.y + b.y); }
 	vec2 sub_vec2(vec2 a,vec2 b) { return vector2(a.x - b.x, a.y - b.y); }
 	vec2 mul_vec2(vec2 a,vec2 b) { return vector2(a.x * b.x, a.y * b.y); }
@@ -82,6 +86,21 @@ namespace math
 	dvec3 sub_vec3(dvec3 a,dvec3 b) { return vector3(a.x - b.x, a.y - b.y, a.z - b.z); }
 	dvec3 mul_vec3(dvec3 a,dvec3 b) { return vector3(a.x * b.x, a.y * b.y, a.z * b.z); }
 	dvec3 div_vec3(dvec3 a,dvec3 b) { return vector3(a.x / b.x, a.y / b.y, a.z / b.z); }
+	
+	vec4 add_vec4(vec4 a,vec4 b) { return vector4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w); }
+	vec4 sub_vec4(vec4 a,vec4 b) { return vector4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w); }
+	vec4 mul_vec4(vec4 a,vec4 b) { return vector4(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w); }
+	vec4 div_vec4(vec4 a,vec4 b) { return vector4(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w); }
+	
+	ivec4 add_vec4(ivec4 a,ivec4 b) { return vector4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w); }
+	ivec4 sub_vec4(ivec4 a,ivec4 b) { return vector4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w); }
+	ivec4 mul_vec4(ivec4 a,ivec4 b) { return vector4(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w); }
+	ivec4 div_vec4(ivec4 a,ivec4 b) { return vector4(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w); }
+	
+	dvec4 add_vec4(dvec4 a,dvec4 b) { return vector4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w); }
+	dvec4 sub_vec4(dvec4 a,dvec4 b) { return vector4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w); }
+	dvec4 mul_vec4(dvec4 a,dvec4 b) { return vector4(a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w); }
+	dvec4 div_vec4(dvec4 a,dvec4 b) { return vector4(a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w); }
     }
     
     

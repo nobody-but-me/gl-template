@@ -18,13 +18,17 @@ namespace math
     
     namespace vectors
     {
+	typedef struct {double x,y,z,w; void zero(void) { this->x = 0.0f; this->y = 0.0f; this->z = 0.0f; this->w = 0.0f; } } dvec4;
+	typedef struct {float  x,y,z,w; void zero(void) { this->x = 0.0f; this->y = 0.0f; this->z = 0.0f; this->w = 0.0f; } }  vec4;
+	typedef struct {int    x,y,z,w; void zero(void) { this->x = 0; this->y = 0; this->z = 0; this->w = 0; } }             ivec4;
+	
+	typedef struct {double x,y,z; void zero(void) { this->x = 0.0f; this->y = 0.0f; this->z = 0.0f; } } dvec3;
+	typedef struct {float  x,y,z; void zero(void) { this->x = 0.0f; this->y = 0.0f; this->z = 0.0f; } }  vec3;
+	typedef struct {int    x,y,z; void zero(void) { this->x = 0; this->y = 0; this->z = 0; } }          ivec3;
+	
 	typedef struct {double x,y; void zero(void) { this->x = 0.0f; this->y = 0.0f; } } dvec2;
 	typedef struct {float  x,y; void zero(void) { this->x = 0.0f; this->y = 0.0f; } }  vec2;
 	typedef struct {int    x,y; void zero(void) { this->x = 0;    this->y = 0; }    } ivec2;
-	
-	typedef struct {double x,y,z;} dvec3;
-	typedef struct {float  x,y,z;}  vec3;
-	typedef struct {int   x, y,z;} ivec3;
 	
 	dvec2 vector2(double x,double y);
 	vec2 vector2(float x,float y);
@@ -63,6 +67,21 @@ namespace math
 	dvec3 sub_vec3(dvec3 a,dvec3 b);
 	dvec3 mul_vec3(dvec3 a,dvec3 b);
 	dvec3 div_vec3(dvec3 a,dvec3 b);
+	
+	vec4 add_vec4(vec4 a,vec4 b);
+	vec4 sub_vec4(vec4 a,vec4 b);
+	vec4 mul_vec4(vec4 a,vec4 b);
+	vec4 div_vec4(vec4 a,vec4 b);
+	
+	ivec4 add_vec4(ivec4 a,ivec4 b);
+	ivec4 sub_vec4(ivec4 a,ivec4 b);
+	ivec4 mul_vec4(ivec4 a,ivec4 b);
+	ivec4 div_vec4(ivec4 a,ivec4 b);
+	
+	dvec4 add_vec4(dvec4 a,dvec4 b);
+	dvec4 sub_vec4(dvec4 a,dvec4 b);
+	dvec4 mul_vec4(dvec4 a,dvec4 b);
+	dvec4 div_vec4(dvec4 a,dvec4 b);
     }
     
     float lerp(float x, float y, float t); // default lerp function
